@@ -28,7 +28,6 @@ class Tag(models.Model):
 class Ingredient(models.Model):
     name = models.CharField(
         max_length=150,
-        unique=True,
         verbose_name='Название ингредиента'
     )
     measurement_unit = models.CharField(
@@ -37,12 +36,12 @@ class Ingredient(models.Model):
     )
 
     class Meta:
-        ordering = ['name']
+        ordering = ['-id']
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
 
     def __str__(self):
-        return f'{self.name} - {self.measurement_unit}'
+        return self.name
 
 
 class Recipe(models.Model):
@@ -58,7 +57,7 @@ class Recipe(models.Model):
     )
     image = models.ImageField(
         verbose_name='Картинка',
-        upload_to='recipes'
+        upload_to='recipes/'
     )
     text = models.TextField(
        verbose_name='Описание рецепта'
@@ -112,26 +111,28 @@ class IngredientInRecipe(models.Model):
         return f'{self.ingredient} в {self.recipe}'
 
 
-class PurchaseList(models.Model):
+class ShoppingCart(models.Model):
     user = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
-        related_name='purchases'
+        related_name='shopping_user'
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Покупка',
-        related_name='customers',
+        related_name='shopping_recipe',
     )
 
     class Meta:
+        ordering = ['-id']
         verbose_name = 'Список для покупок'
         verbose_name_plural = 'Списки для покупок'
-
-    def __str__(self):
-        return f'{self.user}: {self.recipe}'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'recipe'],
+                name='unique_shopping_cart')]
 
 
 class Favorite(models.Model):
@@ -154,32 +155,3 @@ class Favorite(models.Model):
 
     def __str__(self):
         return f'{self.user}: {self.recipe}'
-
-
-class Follow(models.Model):
-    user = models.ForeignKey(
-        CustomUser,
-        on_delete=models.CASCADE,
-        verbose_name='Подписчики',
-        related_name='followers'
-    )
-    author = models.ForeignKey(
-        CustomUser,
-        on_delete=models.CASCADE,
-        verbose_name='Автор, на которого подписываемся',
-        related_name='following'
-    )
-
-    class Meta:
-        ordering = ['user', 'author']
-        verbose_name = 'Подписка'
-        verbose_name_plural = 'Подписки'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['user', 'author'],
-                name='unique_follow'
-            )
-        ]
-
-    def __str__(self):
-        return f'{self.user} - {self.author}'
