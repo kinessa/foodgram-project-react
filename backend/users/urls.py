@@ -1,10 +1,9 @@
 from django.urls import include, path
-from .view import FollowView
+from .view import FollowView, FollowListView
 
 urlpatterns = [
     path('users/<int:id>/subscribe/', FollowView.as_view(), name='subscribe'),
-    path('users/subscriptions/', FollowView.as_view(), name='subscription'),
-    # path('users/subscriptions/', show_follower, name='users_subs'),
+    path('users/subscriptions/', FollowListView.as_view(), name='subscription'),
     path('', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
 ]

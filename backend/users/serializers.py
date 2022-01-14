@@ -67,13 +67,13 @@ class ShowFollowersSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         # current_user = self.context.get('current_user')
         # other_user = user.following.all()
-        if not request or request.is_anonymous:
+        if not request or request.user.is_anonymous:
             return False
         return Follow.objects.filter(user=request.user, author=obj).exists()
 
     def get_recipes(self, obj):
         request = self.context.get('request')
-        if not request or request.is_anonymous:
+        if not request or request.user.is_anonymous:
             return False
         context = {'request': request}
         recipes_limit = request.query_params.get('recipes_limit')

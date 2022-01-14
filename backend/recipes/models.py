@@ -68,8 +68,7 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient,
         through='IngredientInRecipe',
-        verbose_name='Ингредиенты',
-        related_name='recipes'
+        verbose_name='Ингредиенты'
     )
     tags = models.ManyToManyField(
         Tag,
@@ -116,13 +115,13 @@ class ShoppingCart(models.Model):
         CustomUser,
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
-        related_name='shopping_user'
+        related_name='shopping_cart'
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Покупка',
-        related_name='shopping_recipe',
+        related_name='shopping_cart',
     )
 
     class Meta:
@@ -146,12 +145,10 @@ class Favorite(models.Model):
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Рецепт',
-        related_name='favorite_recipe'
+        related_name='favorites'
     )
 
     class Meta:
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранное'
 
-    def __str__(self):
-        return f'{self.user}: {self.recipe}'

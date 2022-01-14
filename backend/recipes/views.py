@@ -1,17 +1,19 @@
-import django_filters.rest_framework
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-from rest_framework import filters, viewsets, status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .filters import RecipeFilter, IngredientSearchFilter
-from .models import (Ingredient, Recipe, Tag, Favorite, IngredientInRecipe, ShoppingCart)
+from .models import (Ingredient, Recipe, Tag, Favorite, IngredientInRecipe,
+                     ShoppingCart)
 from .pagination import CustomPageNumberPagination
 from .permissions import AdminOrAuthorOrReadOnly
-from .serializers import (IngredientSerializer, TagSerializer, UserSerializer, CreateRecipeSerializers,
-                          RecipesSerializers, FavouriteRecipeSerializer, ShoppingCartSerializer)
+from .serializers import (IngredientSerializer, TagSerializer,
+                          CreateRecipeSerializers, RecipesSerializers,
+                          FavouriteRecipeSerializer, ShoppingCartSerializer)
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -31,9 +33,9 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend]
     filter_class = RecipeFilter
-    permission_classes = [AdminOrAuthorOrReadOnly, ]
+    permission_classes = (AdminOrAuthorOrReadOnly,)
     pagination_class = CustomPageNumberPagination
 
     def get_serializer_class(self):
@@ -82,6 +84,7 @@ class ShoppingCartViewSet(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
         ShoppingCart.objects.create(user=user, recipe=recipe)
         serializer = ShoppingCartSerializer(recipe)
+        print(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def delete(self, request, recipe_id):
