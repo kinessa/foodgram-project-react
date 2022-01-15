@@ -2,7 +2,8 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = '^4t9(pfq0$$u&^r*$03e&_z$cpzr=-pf__y9zr0==!2&mj)tm)'
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY', default='^4t9(pfq0$$u&^r*$03e&_z$cpzr=-pf__y9zr0==!2&mj)tm)')
 
 DEBUG = True
 
@@ -55,8 +56,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'ENGINE': os.environ.get('DB_ENGINE', default='django.db.backends.postgresql'),
+            'NAME': os.environ.get('DB_NAME'),
+            'USER': os.environ.get('POSTGRES_USER'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+            'HOST': os.environ.get('DB_HOST'),
     }
 }
 

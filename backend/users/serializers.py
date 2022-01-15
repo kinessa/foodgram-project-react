@@ -1,6 +1,7 @@
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
+
 from .models import CustomUser, Follow
 from recipes.models import Recipe
 
@@ -65,8 +66,6 @@ class ShowFollowersSerializer(serializers.ModelSerializer):
 
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
-        # current_user = self.context.get('current_user')
-        # other_user = user.following.all()
         if not request or request.user.is_anonymous:
             return False
         return Follow.objects.filter(user=request.user, author=obj).exists()

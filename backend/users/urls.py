@@ -1,4 +1,5 @@
 from django.urls import include, path
+
 from .view import FollowView, FollowListView
 
 urlpatterns = [
