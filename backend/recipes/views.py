@@ -50,42 +50,39 @@ class RecipeViewSet(viewsets.ModelViewSet):
         context.update({'request': self.request})
         return context
 
+    @staticmethod
+    def post_method_for_actions(request, pk, serializers):
+        data = {'user': request.user.id, 'recipe': pk}
+        serializer = serializers(data=data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     @action(detail=True, permission_classes=[IsAuthenticated])
     def favorite(self, request, pk):
-        data = {'user': request.user.id, 'recipe': pk}
-        serializer = FavouriteRecipeSerializer(data=data,
-                                               context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return self.post_method_for_actions(
+            request=request, pk=pk, serializers=FavouriteRecipeSerializer)
 
-    @favorite.mapping.delete
-    def delete_favorite(self, request, pk):
+    def shopping_cart(self, request, pk):
+        return self.post_method_for_actions(
+            request=request, pk=pk, serializers=ShoppingCartSerializer)
+
+    @staticmethod
+    def delete_method_for_actions(request, pk, model):
         user = request.user
         recipe = get_object_or_404(Recipe, id=pk)
-        favorite = get_object_or_404(Favorite, user=user, recipe=recipe)
-        favorite.delete()
+        model_obj = get_object_or_404(model, user=user, recipe=recipe)
+        model_obj.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=True, permission_classes=[IsAuthenticated])
-    def shopping_cart(self, request, pk):
-        data = {'user': request.user.id, 'recipe': pk}
-        serializer = ShoppingCartSerializer(
-            data=data, context={'request': request}
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def delete_favorite(self, request, pk):
+        return self.delete_method_for_actions(request=request, pk=pk,
+                                              model=Favorite)
 
-    @shopping_cart.mapping.delete
     def delete_shopping_cart(self, request, pk):
-        user = request.user
-        recipe = get_object_or_404(Recipe, id=pk)
-        shopping_cart = get_object_or_404(
-            ShoppingCart, user=user, recipe=recipe
-        )
-        shopping_cart.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return self.delete_method_for_actions(request=request, pk=pk,
+                                              model=ShoppingCart)
 
 
 class DownloadShoppingCart(APIView):
