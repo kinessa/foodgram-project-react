@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from recipes.pagination import CustomPageNumberPagination
-
 from .models import CustomUser, Follow
 from .serializers import FollowSerializer, ShowFollowersSerializer
 

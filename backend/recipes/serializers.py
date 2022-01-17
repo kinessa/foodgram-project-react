@@ -1,9 +1,10 @@
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
-from .models import (Ingredient, Recipe, Tag, IngredientInRecipe, Favorite,
-                     ShoppingCart)
 from users.serializers import UserCustomSerializer
+
+from .models import (Favorite, Ingredient, IngredientInRecipe, Recipe,
+                     ShoppingCart, Tag)
 
 
 class TagSerializer(serializers.ModelSerializer):
