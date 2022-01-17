@@ -16,7 +16,8 @@ class FollowView(APIView):
         user = request.user
         author = get_object_or_404(CustomUser, id=id)
         if Follow.objects.filter(user=user, id=id).exists():
-            return Response('Уже подписаны', status=status.HTTP_400_BAD_REQUEST)
+            return Response('Уже подписаны',
+                            status=status.HTTP_400_BAD_REQUEST)
         Follow.objects.create(user=user, author=author)
         serializer = FollowSerializer
         return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -21,8 +21,9 @@ class Migration(migrations.Migration):
                                         serialize=False, verbose_name='ID')),
                 ('password', models.CharField(max_length=128,
                                               verbose_name='password')),
-                ('last_login', models.DateTimeField(blank=True, null=True,
-                                                    verbose_name='last login')),
+                ('last_login',
+                 models.DateTimeField(blank=True, null=True,
+                                      verbose_name='last login')),
                 ('is_superuser', models.BooleanField(
                     default=False,
                     help_text='Designates that this user has all permissions'
@@ -60,7 +61,8 @@ class Migration(migrations.Migration):
                     related_query_name='user', to='auth.Group',
                     verbose_name='groups')),
                 ('user_permissions', models.ManyToManyField(
-                    blank=True, help_text='Specific permissions for this user.',
+                    blank=True,
+                    help_text='Specific permissions for this user.',
                     related_name='user_set', related_query_name='user',
                     to='auth.Permission', verbose_name='user permissions')),
             ],
