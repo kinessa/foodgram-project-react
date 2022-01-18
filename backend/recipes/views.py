@@ -88,11 +88,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return self.delete_method_for_actions(request=request, pk=pk,
                                               model=ShoppingCart)
 
-
-class DownloadShoppingCart(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request):
+    @action(detail=False, methods=['GET'],
+            permission_classes=[IsAuthenticated])
+    def download_shopping_cart(self, request):
         user_shopping_cart = IngredientInRecipe.objects.filter(
             recipe__shopping_cart__user=request.user).values_list(
             'ingredient__name', 'amount', 'ingredient__measurement_unit')
