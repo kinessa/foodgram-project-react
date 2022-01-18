@@ -61,7 +61,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            sudo docker pull eugenesal/foodgram_backend
+            sudo docker pull kinessa/foodgram_backend
             sudo docker-compose stop
             sudo docker-compose rm backend
             touch .env
