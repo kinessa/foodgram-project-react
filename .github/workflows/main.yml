@@ -46,7 +46,7 @@ jobs:
           no-cache: true
           push: true
           context: ./backend/
-          tags: eugenesal/foodgram_backend
+          tags: kinessa/foodgram_backend
 
   deploy:
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
