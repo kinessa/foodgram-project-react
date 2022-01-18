@@ -7,9 +7,10 @@ services:
     env_file:
       - ./.env
   backend:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
+    image: kinessa/foodgram_backend
+#    build:
+#      context: ../backend
+#      dockerfile: Dockerfile
     restart: always
     volumes:
       - static_value:/backend/static/
