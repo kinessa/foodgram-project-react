@@ -8,9 +8,6 @@ services:
       - ./.env
   backend:
     image: kinessa/foodgram_backend
-#    build:
-#      context: ../backend
-#      dockerfile: Dockerfile
     restart: always
     volumes:
       - static_value:/backend/static/
@@ -21,9 +18,6 @@ services:
       - ./.env
 
   frontend:
-#    build: # если надо собрать в локале
-#      context: ../frontend
-#      dockerfile: Dockerfile
     image: kinessa/foodgram_frontend
     volumes:
       - ../frontend/:/app/result_build/

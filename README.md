@@ -48,4 +48,8 @@ docker-compose exec web python manage.py createsuperuser
 
 
 
+Сервис доступен по адресу:
+http://www.eklmn.space
+
+Автор проекта: Кириленко Инесса 
 
