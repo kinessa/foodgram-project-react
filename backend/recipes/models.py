@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator
 from django.db import models
 from users.models import CustomUser
 
@@ -98,6 +99,8 @@ class IngredientInRecipe(models.Model):
     amount = models.PositiveIntegerField(
         null=True,
         verbose_name='Количество',
+        validators=[MinValueValidator(
+            1, message='Количество ингредиентов должно быть дольше нуля')]
     )
 
     class Meta:
@@ -108,9 +111,6 @@ class IngredientInRecipe(models.Model):
             models.UniqueConstraint(
                 fields=['recipe', 'ingredient', 'amount'],
                 name='unique_ingredient_in_recipe')]
-
-    def __str__(self):
-        return f'{self.ingredient} в {self.recipe}'
 
 
 class ShoppingCart(models.Model):
