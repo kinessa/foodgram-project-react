@@ -131,11 +131,11 @@ class CreateRecipeSerializers(serializers.ModelSerializer):
         ingredients_list = []
         for ingredient in ingredients:
             ingredient_id = ingredient['id']
-            if ingredient_id in ingredients_list:
-                raise serializers.ValidationError({
-                    'ingredients': 'Ингредиенты должны быть уникальными!'
-                })
-            ingredients_list.append(ingredient_id)
+            # if ingredient_id in ingredients_list:
+            #     raise serializers.ValidationError({
+            #         'ingredients': 'Ингредиенты должны быть уникальными!'
+            #     })
+            # ingredients_list.append(ingredient_id)
             amount = ingredient['amount']
             if int(amount) <= 0:
                 raise serializers.ValidationError({
